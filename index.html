@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+  <!--ヘッダーの設定-->
+  <head>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.2.0/dist/aframe-extras.min.js"></script>
+    <script src="/test/static/components.js"></script>
+    <script src="/test/static/dimension-toggle.js"></script>
+    <script src="/test/static/billboard.js"></script>
+    <script src="/test/static/hotspot-generator.js"></script>
+    <script src="/test/static/teleport-link.js"></script>
+    <link rel="stylesheet" href="/test/static/style.css">
+  </head>
+  <body> 
+    <!--ロード画面の追加-->
+    <div id="loader">
+      <div class="loader-content">
+          <h1><img src="/test/static/assets/nidec-logo.png"></h1>
+          <h1><img src="/test/static/assets/takisawa-logo.gif"></h1>
+          <h1>Virtual ShowRoom</h1>
+          <h1><img id="GifRev"src="/test/static/assets/turret-loading.gif"></h1>
+          <p>Loading...</p>
+          <!--div class="spinner"></div-->
+          <h1><img src="/test/static/assets/turret-loading.gif"></h1>
+          <h7>提供企業</h7>
+          <h2>株式会社TAKISAWA</h2>
+      </div>
+    </div>
+    <a-scene id="myScene">
+      <!--シーンの明るさを調整-->
+      <a-entity light="type: ambient; color: #FFF; intensity: 0.3"></a-entity>
+      <a-entity light="type: directional; color: #FFF; intensity: 0.5;" position="1 1 1"></a-entity>
+
+      <!--ビデオの設定-->
+      <a-assets>
+        <video id="video_TMX-4000IIST" src="/test/static/assets/TMX-4000-JIMTOF2024.mp4" crossorigin="anonymous" webkit-playsinline playsinline loop muted></video>
+        <video id="video_TM-3000Y2" src="/test/static/assets/TM-3000-JIMTOF2024.mp4" crossorigin="anonymous" webkit-playsinline playsinline loop muted></video>
+        <video id="video_TS-4000IIYS" src="/test/static/assets/TS-4000-JIMTOF2024.mp4" crossorigin="anonymous" webkit-playsinline playsinline loop muted></video>
+        <video id="video_VTL-760" src="/test/static/assets/VTL-760-JIMTOF2024.mp4" crossorigin="anonymous" webkit-playsinline playsinline loop muted></video>
+        
+        <img id="info-icon-yellow" src="/test/static/assets/yellow-icon.svg">
+        <img id="info-icon-green" src="/test/static/assets/green-icon.svg">
+        <img id="close-icon-yellow" src="/test/static/assets/yellow-icon_close.svg">
+        <img id="close-icon-green" src="/test/static/assets/green-icon_close.svg">
+        <img id="emo-icon" src="/test/static/assets/EMO-Logo_DATE_rgb_neg_2025.png">
+        <a-mixin 
+          id="hotspot-svg-base" 
+          class="clickable"
+          geometry="primitive: plane; width: 0.3; height: 0.3"
+          material="shader: flat; transparent: true"
+          billboard>
+        </a-mixin>
+
+        <a-mixin 
+          id="hotspot-yellow"   position="-0.5 1 1.5">
+        </a-mixin>
+
+        <a-mixin 
+          id="hotspot-green"   position="0.5 1 1.5">
+        </a-mixin>
+      </a-assets>
+
+      <!--カメラの設定-->
+      <a-entity 
+        id="cameraRig" 
+        camera
+        look-controls
+        wasd-controls="acceleration: 65"
+        movement-boundary="minX: -4.9; maxX: 14.9; minZ: -4.9; maxZ: 31.4"
+        position="5 1.6 30">
+        <a-entity cursor="rayOrigin: mouse" raycaster="objects: .clickable, a-gltf-model"></a-entity>
+      </a-entity>     
+      
+      <!--モデルの設定-->
+      <!-- 障害物判定させたいモデルにはclass="obstacle"を付ける -->
+      <a-gltf-model id="floor-map" src="/test/static/background/VRTemplateMap.gltf" position="0 0 0" scale="1 1 1" class="obstacle"></a-gltf-model>
+
+
+      <a-entity id="teleport-indicators"></a-entity>
+
+      <!-- hotspot-generatorの"dimensionTarget"に機械の寸法線のidを渡すと、いい感じの位置に自動で寸法ボタンを表示させます。 -->
+      <!-- hotspot-generatorの"videoSrc"に動画のidを渡すと、いい感じの位置に動画ボタンと動画本体を表示させます。 -->
+      <!--TCC-2100の設定-->
+      <a-entity id="TCC-2100L2" position="0.51 0.84 18.33" rotation="0 90 0" 
+                hotspot-generator="dimensionTarget: #TCC-2100L2-dims;">
+        <!--寸法の設定-->
+        <a-entity id="TCC-2100L2-dims" visible="false">
+          <!--機械寸法の設定-->
+          <a-entity
+            position="0.43 0.02 0"
+            box-outline="width: 2.231; height: 1.7; depth: 1.495"
+            autodims>
+          </a-entity>
+          <!--最大加工径・長の寸法の設定-->
+          <a-entity
+            position="0.041 0.197 0.436"  rotation="0 0 -90"
+            cylinder-outline="radius: 0.175; height: 0.189"
+            autodims-cylinder>
+          </a-entity>
+        </a-entity>
+      </a-entity>
+
+      <a-entity id="TT-2600IIG" position="0.188 1.188 11.7" rotation="0 90 0"
+      hotspot-generator="dimensionTarget: #TT-2600IIG-dims;">
+        <!--寸法の設定-->
+        <a-entity id="TT-2600IIG-dims" visible="false">
+          <!--機械寸法の設定-->
+          <a-entity
+            position="-0.05 0.735 -0.4"
+            box-outline="width: 3.414; height: 3.84; depth: 2.937"
+            autodims>
+          </a-entity>
+          <!--最大加工径・長の寸法の設定-->
+          <a-entity
+            position="-0.763 -0.059 0.4"  rotation="0 90 -90"
+            cylinder-outline="radius: 0.145; height: 0.204"
+            autodims-cylinder>
+          </a-entity>
+          <!--最大加工径・長の寸法の設定-->
+          <a-entity
+            position="-0.316 -0.059 0.4"  rotation="0 90 -90"
+            cylinder-outline="radius: 0.145; height: 0.204"
+            autodims-cylinder>
+          </a-entity>
+        </a-entity>
+      </a-entity>
+
+      <a-entity id="TMS-2000S" position="0.32 0.984 5.393" rotation="0 90 0"
+      hotspot-generator="dimensionTarget: #TMS-2000S-dims;">
+        <!--寸法の設定-->
+        <a-entity id="TMS-2000S-dims" visible="false">
+          <!--機械寸法の設定-->
+          <a-entity
+            position="0.54 0.065 0.2"
+            box-outline="width: 4.072; height: 2.081; depth: 2.275"
+            autodims>
+          </a-entity>
+          <!--最大加工径・長の寸法の設定-->
+          <a-entity
+            position="-0.247 0.111 0.462"  rotation="0 0 -90"
+            cylinder-outline="radius: 0.185; height: 0.625"
+            autodims-cylinder>
+          </a-entity>
+        </a-entity>
+      </a-entity>
+
+      <a-entity id="TSL-550" position="0.986 0.554 0.164" rotation="0 90 0"
+      hotspot-generator="dimensionTarget: #TSL-550-dims;">
+        <!--寸法の設定-->
+        <a-entity id="TSL-550-dims" visible="false">
+          <!--機械寸法の設定-->
+          <a-entity
+            position="0 0.02 0"
+            box-outline="width: 1.5; height: 1.1; depth: 0.49"
+            autodims="textWidth: 3">
+          </a-entity>
+          <!--最大加工径・長の寸法の設定-->
+          <!--<a-entity
+            position="-0.008 0.422 -0.071"  rotation="0 0 -90"
+            cylinder-outline="radius: 0.1; height: 0.3"
+            autodims-cylinder>
+          </a-entity>-->
+        </a-entity>
+      </a-entity>
+
+      <a-entity id="TAC-650L10" position="9.104 0.887 0.038" rotation="0 -90 0"
+      hotspot-generator="dimensionTarget: #TAC-650L10-dims;">
+         <!--寸法の設定-->
+        <a-entity id="TAC-650L10-dims" visible="false">
+          <!--機械寸法の設定-->
+          <a-entity
+            position="0.25 0.02 0.15"
+            box-outline="width: 3.065; height: 1.77; depth: 1.52"
+            autodims>
+          </a-entity>
+          <!--最大加工径・長の寸法の設定-->
+          <!--<a-entity
+            position="-0.065 0.194 0.234"  rotation="0 0 -90"
+            cylinder-outline="radius: 0.325; height: 0.9"
+            autodims-cylinder>
+          </a-entity>-->
+        </a-entity>
+      </a-entity>
+
+      <a-entity id="TMX-4000IIST" position="9.75 1.4 5.226" rotation="0 -90 0"
+      hotspot-generator="dimensionTarget: #TMX-4000IIST-dims; videoSrc: #video_TMX-4000IIST;">
+        <!--寸法の設定-->
+        <a-entity id="TMX-4000IIST-dims" visible="false">
+          <!--機械寸法の設定-->
+          <a-entity
+            position="0.65 0.18 0.1"
+            box-outline="width: 6.95; height: 3.16; depth: 3.014"
+            autodims>
+          </a-entity>
+          <!--最大加工径・長の寸法の設定-->
+          <a-entity
+            position="0.130 -0.03 0.377"  rotation="0 0 -90"
+            cylinder-outline="radius: 0.25; height: 1.5"
+            autodims-cylinder>
+          </a-entity>
+        </a-entity>
+      </a-entity>
+
+      <a-entity id="TM-3000Y2" position="9.536 1.01 11.97" rotation="0 -90 0"
+      hotspot-generator="dimensionTarget: #TM-3000Y2-dims; videoSrc: #video_TM-3000Y2;">
+        <!--寸法の設定-->
+        <a-entity id="TM-3000Y2-dims" visible="false">
+          <!--機械寸法の設定-->
+          <a-entity
+            position="0.5 0.15 0.2"
+            box-outline="width: 4.249; height: 2.23; depth: 2.46"
+            autodims>
+          </a-entity>
+          <!--最大加工径・長の寸法の設定-->
+          <a-entity
+            position="-0.108 0.211 0.326"  rotation="0 0 -90"
+            cylinder-outline="radius: 0.1075; height: 0.62"
+            autodims-cylinder>
+          </a-entity>
+        </a-entity>
+      </a-entity>
+
+      <a-entity id="TS-4000IIYS" position="9.536 1.09 18" rotation="0 -90 0"
+      hotspot-generator="dimensionTarget: #TS-4000IIYS-dims; videoSrc: #video_TS-4000IIYS;">      
+        <!--寸法の設定-->
+        <a-entity id="TS-4000IIYS-dims" visible="false">
+          <!--機械寸法の設定-->
+          <a-entity
+            position="0.56 0.07 0.2"
+            box-outline="width: 4.255; height: 2.3; depth: 2.59"
+            autodims>
+          </a-entity>
+          <!--最大加工径・長の寸法の設定-->
+          <a-entity
+            position="-0.05 -0.03 0.377"  rotation="0 0 -90"
+            cylinder-outline="radius: 0.175; height: 0.735"
+            autodims-cylinder>
+          </a-entity>
+        </a-entity>
+      </a-entity>
+
+      <a-entity id="VTL-760" position="10.2 1.554 23.498" rotation="0 -90 0"
+      hotspot-generator="dimensionTarget: #VTL-760-dims; videoSrc: #video_VTL-760;">
+        <!--寸法の設定-->
+        <a-entity id="VTL-760-dims" visible="false">
+          <!--機械寸法の設定-->
+          <a-entity
+            position="0 0.12 -0.2"
+            box-outline="width: 2.035; height: 3.31; depth: 4.12"
+            autodims>
+          </a-entity>
+          <!--最大加工径・長の寸法の設定-->
+          <a-entity
+            position="-0.522 0.017 0.566"  rotation="0 180 0"
+            cylinder-outline="radius: 0.4; height: 0.68"
+            autodims-cylinder>
+          </a-entity>
+        </a-entity>
+      </a-entity>
+
+      <!-- テレポートポイント -->
+      <a-entity
+        position="5 0.01 -2"
+        teleport-point="href: index_EMO.html; label: Move to EMO Showroom; imgSrc: /test/static/assets/EMO-Logo_DATE_rgb_pos_2025.png">
+      </a-entity>
+
+      <!--操作方法画面-->
+      <div id="help-panel-placeholder"></div>
+    </a-scene>
+
+    
+
+    <script src="/test/static/component-loader.js"></script> 
+    <script src="/test/static/distance-fade.js"></script>
+    <!-- 機械のモデルに"DoorOpen"と"DoorClose"という名前のアニメーションが含まれている場合、class="interactive-machine"をつけることで再生できる -->
+    <script src="/test/static/machine-animation.js"></script>
+    
+
+  </body>
+</html>

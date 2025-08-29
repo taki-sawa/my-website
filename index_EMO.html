@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  <!--ヘッダーの設定-->
+  <head>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.2.0/dist/aframe-extras.min.js"></script>
+    <script src="/test/static/components.js"></script>
+    <script src="/test/static/dimension-toggle.js"></script>
+    <script src="/test/static/billboard.js"></script>
+    <script src="/test/static/hotspot-generator.js"></script>
+    <script src="/test/static/teleport-link.js"></script>
+    <link rel="stylesheet" href="/test/static/style.css">
+  </head>
+  <body> 
+    <!--ロード画面の追加-->
+    <div id="loader">
+      <div class="loader-content">
+          <h1><img src="/test/static/assets/nidec-logo.png"></h1>
+          <h1><img src="/test/static/assets/takisawa-logo.gif"></h1>
+          <h1>Virtual ShowRoom</h1>
+          <h1><img id="GifRev"src="/test/static/assets/turret-loading.gif"></h1>
+          <p>Loading...</p>
+          <!--div class="spinner"></div-->
+          <h1><img src="/test/static/assets/turret-loading.gif"></h1>
+          <h7>提供企業</h7>
+          <h2>株式会社TAKISAWA</h2>
+      </div>
+    </div>
+    <a-scene id="myScene">
+      <!--シーンの明るさを調整-->
+      <a-entity light="type: ambient; color: #FFF; intensity: 0.3"></a-entity>
+      <a-entity light="type: directional; color: #FFF; intensity: 0.5;" position="1 1 1"></a-entity>
+
+      <!--ビデオの設定-->
+      <a-assets>
+        <video id="video_TMX-4000IIST" src="/test/static/assets/TMX-4000-JIMTOF2024.mp4" crossorigin="anonymous" webkit-playsinline playsinline loop muted></video>
+        <video id="video_TM-3000Y2" src="/test/static/assets/TM-3000-JIMTOF2024.mp4" crossorigin="anonymous" webkit-playsinline playsinline loop muted></video>
+        <video id="video_TS-4000IIYS" src="/test/static/assets/TS-4000-JIMTOF2024.mp4" crossorigin="anonymous" webkit-playsinline playsinline loop muted></video>
+        <video id="video_VTL-760" src="/test/static/assets/VTL-760-JIMTOF2024.mp4" crossorigin="anonymous" webkit-playsinline playsinline loop muted></video>
+        
+        <img id="info-icon-yellow" src="/test/static/assets/yellow-icon.svg">
+        <img id="info-icon-green" src="/test/static/assets/green-icon.svg">
+        <img id="close-icon-yellow" src="/test/static/assets/yellow-icon_close.svg">
+        <img id="close-icon-green" src="/test/static/assets/green-icon_close.svg">
+        <a-mixin 
+          id="hotspot-svg-base" 
+          class="clickable"
+          geometry="primitive: plane; width: 0.3; height: 0.3"
+          material="shader: flat; transparent: true"
+          billboard>
+        </a-mixin>
+
+        <a-mixin 
+          id="hotspot-yellow"   position="-0.5 1 1.5">
+        </a-mixin>
+
+        <a-mixin 
+          id="hotspot-green"   position="0.5 1 1.5">
+        </a-mixin>
+      </a-assets>
+
+      <!--カメラの設定-->
+      <a-entity 
+        id="cameraRig" 
+        camera
+        look-controls
+        wasd-controls="acceleration: 65"
+        movement-boundary="minX: -4.9; maxX: 14.9; minZ: -4.9; maxZ: 31.4"
+        position="5 1.6 30">
+        <a-entity cursor="rayOrigin: mouse" raycaster="objects: .clickable, a-gltf-model"></a-entity>
+      </a-entity>     
+      
+      <!--モデルの設定-->
+      <!-- 障害物判定させたいモデルにはclass="obstacle"を付ける -->
+      <a-gltf-model id="floor-map" src="/test/static/background/EMOMap.glb" position="0 0 0" scale="1 1 1" class="obstacle"></a-gltf-model>
+      <!-- <a-entity gltf-model="/test/static/background/signboard_TS-4000.glb" position="0 0 0" rotation="0 0 0" scale="1 1 1"></a-entity> -->
+      <a-entity gltf-model="/test/static/background/Human_reach out.glb" position="0 0 0" rotation="0 0 0" scale="1 1 1"></a-entity>
+      <a-entity gltf-model="/test/static/background/Human_upright.glb" position="0 0 0" rotation="0 0 0" scale="1 1 1"></a-entity>
+
+      <a-entity id="teleport-indicators"></a-entity>
+
+      <!--class="interactive-machine"ドア開閉のアニメーション用-->
+      <a-entity
+        id="TT-2100II-wrapper"
+        position="9.5 1 25"
+        rotation="0 -90 0"
+        hotspot-generator="dimensionTarget: #TT-2100II-dims;">
+      
+          <a-entity
+            id="TT-2100II"
+            gltf-model="/test/static/background/TT-2100II-optimized.glb"
+            rotation="0 90 0"
+            class="obstacle clickable interactive-machine">
+          </a-entity>
+      
+          <a-entity id="TT-2100II-dims" visible="false">
+            <a-entity
+              position="0 0.1 -0.3"
+              box-outline="width: 3.6; height: 2.2; depth: 2.2"
+              autodims>
+            </a-entity>
+            <a-entity
+              position="-0.172 0.021 0.182"  rotation="0 -90 -90"
+              cylinder-outline="radius: 0.15; height: 0.15"
+              autodims-cylinder>
+            </a-entity>
+            <a-entity
+              position="0.172 0.021 0.182"  rotation="0 -90 -90"
+              cylinder-outline="radius: 0.15; height: 0.15"
+              autodims-cylinder>
+            </a-entity>
+          </a-entity>
+      </a-entity>
+
+      <a-entity
+        id="TCY-200IIYS-wrapper"
+        position="0.8 1 16"
+        rotation="0 90 0"
+        hotspot-generator="dimensionTarget: #TCY-200IIYS-dims;">
+      
+          <a-entity
+            id="TCY-200IIYS"
+            gltf-model="/test/static/background/TCY-200IIYS-optimized.glb"
+            position="-1 0 0"
+            rotation="0 90 0"
+            class="obstacle clickable interactive-machine">
+          </a-entity>
+      
+          <a-entity id="TCY-200IIYS-dims" visible="false">
+            <a-entity
+              position="0 -0.1 -0.3"
+              box-outline="width: 3.8; height: 1.7; depth: 1.8"
+              autodims>
+            </a-entity>
+            <a-entity
+              position="-0.6 0 0"  rotation="0 0 -90"
+              cylinder-outline="radius: 0.1; height: 0.55"
+              autodims-cylinder>
+            </a-entity>
+          </a-entity>
+      </a-entity>
+
+      <a-entity id="TS-4000IIYS" position="9.536 1.09 18" rotation="0 -90 0"
+      hotspot-generator="dimensionTarget: #TS-4000IIYS-dims; videoSrc: #video_TS-4000IIYS;">      
+        <!--寸法の設定-->
+        <a-entity id="TS-4000IIYS-dims" visible="false">
+          <!--機械寸法の設定-->
+          <a-entity
+            position="0.56 0.07 0.2"
+            box-outline="width: 4.255; height: 2.3; depth: 2.59"
+            autodims>
+          </a-entity>
+          <!--最大加工径・長の寸法の設定-->
+          <a-entity
+            position="-0.05 -0.03 0.377"  rotation="0 0 -90"
+            cylinder-outline="radius: 0.175; height: 0.735"
+            autodims-cylinder>
+          </a-entity>
+        </a-entity>
+      </a-entity>
+
+      <a-entity id="TEX-2500S" position="0.2 1.09 23.5" rotation="0 90 0"
+      hotspot-generator="dimensionTarget: #TEX-2500S-dims;">      
+        <!--寸法の設定-->
+        <a-entity id="TEX-2500S-dims" visible="false">
+          <!--機械寸法の設定-->
+          <a-entity
+            position="0.56 0.1 0.2"
+            box-outline="width: 4.3; height: 2.35; depth: 2.59"
+            autodims>
+          </a-entity>
+          <!--最大加工径・長の寸法の設定-->
+          <a-entity
+            position="0.205 0.057 0.429"  rotation="0 0 -90"
+            cylinder-outline="radius: 0.175; height: 1.3"
+            autodims-cylinder>
+          </a-entity>
+        </a-entity>
+      </a-entity>
+
+      <!-- テレポートポイント -->
+      <a-entity
+        position="5 0.01 10"
+        teleport-point="href: index.html; label: Return to Main Showroom">
+      </a-entity>
+
+      
+
+      <!--操作方法画面-->
+      <div id="help-panel-placeholder"></div>
+
+    <script src="/test/static/component-loader.js"></script> 
+    <script src="/test/static/distance-fade.js"></script>
+    <!-- 機械のモデルに"DoorOpen"と"DoorClose"という名前のアニメーションが含まれている場合、class="interactive-machine"をつけることで再生できる -->
+    <script src="/test/static/machine-animation.js"></script>
+    
+
+  </body>
+</html>

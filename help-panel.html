@@ -1,0 +1,29 @@
+<div id="ui-container">
+  <button id="help-button">操作方法</button>
+
+  <div id="help-panel" class="hidden">
+    <h2>操作方法</h2>
+    <ul>
+      <li>
+        <strong>移動:</strong> 床をクリック / WASDキー
+      </li>
+      <li>
+        <strong>移動速度の調整:</strong>
+        <input type="range" id="speed-slider" min="10" max="200" value="65">
+      </li>
+      <li>
+        <strong>視点移動:</strong> マウスのドラッグ操作
+      </li>
+      <li>
+        <strong>視点操作の反転:</strong> <input type="checkbox" id="invert-camera-checkbox">
+      </li>
+      <li>
+        <strong><img src="/test/static/assets/yellow-icon.svg" alt="黄色いアイコン" class="help-icon"> をクリック:</strong> 寸法表示のON/OFF
+      </li>
+      <li>
+        <strong><img src="/test/static/assets/green-icon.svg" alt="緑のアイコン" class="help-icon"> をクリック:</strong> 紹介動画の再生
+      </li>
+    </ul>
+    <button id="close-help-button">閉じる</button>
+  </div>
+</div>
